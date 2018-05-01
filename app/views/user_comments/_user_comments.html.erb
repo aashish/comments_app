@@ -1,8 +1,15 @@
 <% user_comments.each do |user_comment| %>
   <tr>
-    <td><%= raw user_comment.description %></td>
-    <td><%= user_comment.ip %></td>
-    <td><%= user_comment.created_at %></td>
-    <td><%= link_to 'Destroy', user_comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+    <td>
+      <div>
+        <p>
+          Comment from
+          <%= "#{user_comment.ip} at #{user_comment.created_at}" %>
+        </p>
+        <p>
+          <%= raw user_comment.description %>
+        </p>
+      </td>
+
+    </tr>
+  <% end %>

@@ -1,11 +1,10 @@
 class UserCommentsController < ApplicationController
-  before_action :set_user_comment, only: :destroy
-  before_action :set_user_comments, only: [:index, :create]
 
   # GET /user_comments
   # GET /user_comments.json
   def index
     @user_comment = UserComment.new
+    set_user_comments
   end
 
   # POST /user_comments
@@ -16,6 +15,7 @@ class UserCommentsController < ApplicationController
 
     respond_to do |format|
       if @user_comment.save
+        set_user_comments
         format.js
         format.html { redirect_to @user_comment, notice: 'User comment was successfully created.' }
         format.json { render :show, status: :created, location: @user_comment }
@@ -26,21 +26,7 @@ class UserCommentsController < ApplicationController
     end
   end
 
-  # DELETE /user_comments/1
-  # DELETE /user_comments/1.json
-  def destroy
-    @user_comment.destroy
-    respond_to do |format|
-      format.html { redirect_to user_comments_url, notice: 'User comment was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
   private
-    def set_user_comment
-      @user_comment = UserComment.find(params[:id])
-    end
-
     def set_user_comments
       @user_comments = UserComment.valid_comments(request.remote_ip).reverse
     end

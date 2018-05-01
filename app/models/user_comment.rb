@@ -5,18 +5,23 @@ class UserComment < ApplicationRecord
     start_time = order("created_at asc").first.created_at
     last_time = order("created_at asc").last.created_at
     arr = []
-    while start_time < last_time do
-      arr << where("ip = ? AND created_at >= ? AND created_at < ?", ip, start_time, start_time + 5.minutes ).order("created_at asc").first
-      start_time += 5.minutes
+    while start_time <= last_time do
+      record = where("(ip = ? AND created_at >= ? AND created_at < ?) OR (ip = ? AND created_at > ?)", ip, start_time, start_time + 5.minutes, ip, start_time ).order("created_at asc").first
+      if record && start_time < record.created_at
+        arr << record
+        start_time = record.created_at
+      else
+        start_time += 5.minutes
+      end
     end
-    arr.compact!
+    arr.compact
   end
 
   private
 
   def parse_description
     description.gsub!(/[\<\/]+[a-z]+\>/) do |match|
-      if ['<em>', '</em>', '<strong>', '</strong>'].include? match
+      if ['<i>', '</i>', '<b>', '</b>'].include? match
         match
       else
         match = ''
