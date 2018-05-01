@@ -1,11 +1,11 @@
 class UserCommentsController < ApplicationController
   before_action :set_user_comment, only: :destroy
+  before_action :set_user_comments, only: [:index, :create]
 
   # GET /user_comments
   # GET /user_comments.json
   def index
     @user_comment = UserComment.new
-    @user_comments = UserComment.all.order('created_at desc')
   end
 
   # POST /user_comments
@@ -16,7 +16,6 @@ class UserCommentsController < ApplicationController
 
     respond_to do |format|
       if @user_comment.save
-        @user_comments = UserComment.all.order('created_at desc')
         format.js
         format.html { redirect_to @user_comment, notice: 'User comment was successfully created.' }
         format.json { render :show, status: :created, location: @user_comment }
@@ -40,6 +39,10 @@ class UserCommentsController < ApplicationController
   private
     def set_user_comment
       @user_comment = UserComment.find(params[:id])
+    end
+
+    def set_user_comments
+      @user_comments = UserComment.valid_comments(request.remote_ip).reverse
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
