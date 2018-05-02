@@ -1,1 +1,5 @@
-$('#user_comments').html('<%= escape_javascript render("user_comments", user_comments: @user_comments) %>');
+<% if @result %>
+  $('#user_comments').html('<%= escape_javascript render("user_comments", user_comments: @user_comments) %>');
+<% else %>
+  $('#errors-div').html('<%= j(render "error_messages", object: @user_comment) %>');
+<% end %>

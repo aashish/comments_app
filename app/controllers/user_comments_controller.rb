@@ -14,12 +14,13 @@ class UserCommentsController < ApplicationController
     @user_comment.ip = request.remote_ip
 
     respond_to do |format|
-      if @user_comment.save
+      if @result = @user_comment.save
         set_user_comments
         format.js
         format.html { redirect_to @user_comment, notice: 'User comment was successfully created.' }
         format.json { render :show, status: :created, location: @user_comment }
       else
+        format.js
         format.html { render :new }
         format.json { render json: @user_comment.errors, status: :unprocessable_entity }
       end

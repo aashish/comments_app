@@ -1,5 +1,7 @@
 class UserComment < ApplicationRecord
-  before_save :parse_description
+  validate :description_valid?
+
+  # before_save :parse_description
 
   def self.valid_comments(ip)
     start_time = order("created_at asc").first.created_at
@@ -26,6 +28,12 @@ class UserComment < ApplicationRecord
       else
         match = ''
       end
+    end
+  end
+
+  def description_valid?
+    if description =~ /<[^\/bi]+|<[b][a-z]+>/
+      errors.add(:description, 'can only contain <b> and <i> tags')
     end
   end
 end
