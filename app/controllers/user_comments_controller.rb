@@ -29,7 +29,7 @@ class UserCommentsController < ApplicationController
 
   private
     def set_user_comments
-      @user_comments = UserComment.valid_comments(request.remote_ip).reverse
+      @user_comments = UserComment.valid_comments
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
